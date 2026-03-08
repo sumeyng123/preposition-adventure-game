@@ -1,0 +1,22 @@
+# 依賴包目錄（可以用 npm install 重新安裝）
+node_modules/
+
+# 系統文件
+.DS_Store
+Thumbs.db
+
+# 編輯器配置
+.vscode/
+.idea/
+
+# 日誌文件
+*.log
+npm-debug.log*
+
+# 臨時文件
+*.tmp
+*.temp
+
+# 打包文件
+dist/
+build/
