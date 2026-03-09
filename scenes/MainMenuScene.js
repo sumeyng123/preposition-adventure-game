@@ -31,22 +31,29 @@ class MainMenuScene extends Phaser.Scene {
             fill: '#ffeb3b'
         }).setOrigin(0.5);
 
-        // 開始按鈕
-        const startButton = this.createButton(400, 300, '🎮 開始遊戲', 0x4caf50);
+        // 開始按鈕 - 鍵盤模式
+        const startButton = this.createButton(400, 280, '🎮 鍵盤模式', 0x4caf50);
         startButton.on('pointerdown', () => {
             this.sound.stopAll();
             this.scene.start('ActionGameScene');
         });
         
+        // 語音模式按鈕
+        const voiceButton = this.createButton(400, 360, '🎤 語音模式', 0xff5722);
+        voiceButton.on('pointerdown', () => {
+            this.sound.stopAll();
+            this.scene.start('VoiceActionGameScene');
+        });
+        
         // 經典模式按鈕
-        const classicButton = this.createButton(400, 380, '📚 經典模式', 0x9c27b0);
+        const classicButton = this.createButton(400, 440, '📚 經典關卡', 0x9c27b0);
         classicButton.on('pointerdown', () => {
             this.sound.stopAll();
             this.scene.start('CityLevelScene');
         });
 
         // 說明按鈕
-        const instructionsButton = this.createButton(400, 460, '遊戲說明', 0x2196f3);
+        const instructionsButton = this.createButton(400, 520, '遊戲說明', 0x2196f3);
         instructionsButton.on('pointerdown', () => {
             this.showInstructions();
         });
