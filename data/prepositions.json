@@ -1,0 +1,80 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "sentence": "The cat is ___ the box.",
+      "category": "Position",
+      "correctAnswer": "in",
+      "options": ["in", "on", "under", "beside"],
+      "imageDescriptions": {
+        "in": "🐱📦 貓在盒子裡面",
+        "on": "🐱⬆️📦 貓在盒子上面",
+        "under": "🐱⬇️📦 貓在盒子下面",
+        "beside": "🐱↔️📦 貓在盒子旁邊"
+      },
+      "explanation": "The cat is inside the box."
+    },
+    {
+      "id": 2,
+      "sentence": "The bird is flying ___ the tree.",
+      "category": "Position",
+      "correctAnswer": "over",
+      "options": ["over", "under", "in", "around"],
+      "imageDescriptions": {
+        "over": "🦅⬆️🌳 鳥在樹上方飛",
+        "under": "🦅⬇️🌳 鳥在樹下飛",
+        "in": "🦅🌳 鳥在樹裡面",
+        "around": "🦅🔄🌳 鳥繞著樹飛"
+      },
+      "explanation": "The bird flies above the tree."
+    },
+    {
+      "id": 3,
+      "sentence": "The ball rolled ___ the tunnel.",
+      "category": "Direction",
+      "correctAnswer": "through",
+      "options": ["through", "over", "around", "beside"],
+      "imageDescriptions": {
+        "through": "⚽🚇 球穿過隧道",
+        "over": "⚽⬆️ 球越過隧道",
+        "around": "⚽🔄 球繞過隧道",
+        "beside": "⚽↔️ 球在隧道旁邊"
+      },
+      "explanation": "The ball goes inside and exits the tunnel."
+    },
+    {
+      "id": 4,
+      "sentence": "The dog is hiding ___ the table.",
+      "category": "Position",
+      "correctAnswer": "under",
+      "options": ["under", "on", "above", "beside"],
+      "imageDescriptions": {
+        "under": "🐕⬇️🪑 狗在桌子下面",
+        "on": "🐕⬆️🪑 狗在桌子上面",
+        "above": "🐕☁️ 狗在桌子上方",
+        "beside": "🐕↔️🪑 狗在桌子旁邊"
+      },
+      "explanation": "The dog is beneath the table."
+    },
+    {
+      "id": 5,
+      "sentence": "The book is ___ the shelf.",
+      "category": "Position",
+      "correctAnswer": "on",
+      "options": ["on", "under", "in", "beside"],
+      "imageDescriptions": {
+        "on": "📚⬆️📚 書在書架上",
+        "under": "📚⬇️ 書在書架下",
+        "in": "📚📦 書在書架裡",
+        "beside": "📚↔️ 書在書架旁"
+      },
+      "explanation": "The book sits on top of the shelf."
+    }
+  ],
+  "prepositions": {
+    "Position": ["in", "on", "under", "above", "below", "beside", "between", "behind"],
+    "Direction": ["through", "across", "over", "around", "into", "out of", "up", "down"],
+    "Time": ["at", "on", "in", "during", "before", "after"],
+    "Place": ["at", "in", "on", "by", "near", "to", "from"]
+  }
+}
