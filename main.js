@@ -1,6 +1,7 @@
 import MainMenuScene from './scenes/MainMenuScene.js';
 import ActionGameScene from './scenes/ActionGameScene.js';
 import VoiceActionGameScene from './scenes/VoiceActionGameScene.js';
+import EnhancedVoiceGameScene from './scenes/EnhancedVoiceGameScene.js';
 import CityLevelScene from './scenes/CityLevelScene.js';
 import ForestLevelScene from './scenes/ForestLevelScene.js';
 import JungleLevelScene from './scenes/JungleLevelScene.js';
@@ -15,6 +16,7 @@ const config = {
         MainMenuScene,
         ActionGameScene,
         VoiceActionGameScene,
+        EnhancedVoiceGameScene,
         CityLevelScene,
         ForestLevelScene,
         JungleLevelScene
