@@ -3,16 +3,19 @@ class JungleLevelScene extends Phaser.Scene {
         super({ key: 'JungleLevelScene' });
     }
 
+    preload() {
+        // 加載叢林背景圖片
+        this.load.image('jungleBg', 'assets/images/jungle .jpg');
+    }
+
     create() {
         this.score = 0;
         this.gemsCollected = 0;
         this.totalGems = 5;
         this.isCompleted = false;
         
-        // 背景 - 叢林
-        // 深綠 0x2d5016，也可以改成：
-        // 熱帶 0x006400, 神秘 0x1a4d2e, 翠綠 0x2e8b57
-        this.add.rectangle(400, 300, 800, 600, 0x2d5016);
+        // 背景 - 使用上傳的叢林圖片
+        this.add.image(400, 300, 'jungleBg').setDisplaySize(800, 600);
         
         // 地面
         const ground = this.add.rectangle(400, 550, 800, 100, 0x4a3c28);

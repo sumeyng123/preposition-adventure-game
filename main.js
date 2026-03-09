@@ -1,4 +1,5 @@
 import MainMenuScene from './scenes/MainMenuScene.js';
+import ActionGameScene from './scenes/ActionGameScene.js';
 import CityLevelScene from './scenes/CityLevelScene.js';
 import ForestLevelScene from './scenes/ForestLevelScene.js';
 import JungleLevelScene from './scenes/JungleLevelScene.js';
@@ -11,6 +12,7 @@ const config = {
     backgroundColor: '#2d2d2d',
     scene: [
         MainMenuScene,
+        ActionGameScene,
         CityLevelScene,
         ForestLevelScene,
         JungleLevelScene

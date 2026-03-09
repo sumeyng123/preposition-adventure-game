@@ -3,14 +3,17 @@ class CityLevelScene extends Phaser.Scene {
         super({ key: 'CityLevelScene' });
     }
 
+    preload() {
+        // 加載城市背景圖片
+        this.load.image('cityBg', 'assets/images/city-background.jpg');
+    }
+
     create() {
         this.score = 0;
         this.isCompleted = false;
         
-        // 背景 - 城市
-        // 天空藍 0x87ceeb，也可以改成：
-        // 黃昏 0xffa07a, 夜晚 0x191970, 日出 0xffb6c1
-        this.add.rectangle(400, 300, 800, 600, 0x87ceeb);
+        // 背景 - 使用上傳的城市圖片
+        this.add.image(400, 300, 'cityBg').setDisplaySize(800, 600);
         
         // 地面
         this.add.rectangle(400, 550, 800, 100, 0x808080);

@@ -3,15 +3,18 @@ class ForestLevelScene extends Phaser.Scene {
         super({ key: 'ForestLevelScene' });
     }
 
+    preload() {
+        // 加載森林背景圖片
+        this.load.image('forestBg', 'assets/images/forest .jpg');
+    }
+
     create() {
         this.score = 0;
         this.isCompleted = false;
         this.jumps = 0;
         
-        // 背景 - 森林
-        // 淺綠 0x8fbc8f，也可以改成：
-        // 深綠 0x228b22, 秋天 0xdaa520, 春天 0x90ee90
-        this.add.rectangle(400, 300, 800, 600, 0x8fbc8f);
+        // 背景 - 使用上傳的森林圖片
+        this.add.image(400, 300, 'forestBg').setDisplaySize(800, 600);
         
         // 地面
         const ground = this.add.rectangle(400, 550, 800, 100, 0x654321);

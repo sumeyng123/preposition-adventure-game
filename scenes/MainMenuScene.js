@@ -4,14 +4,16 @@ class MainMenuScene extends Phaser.Scene {
     }
 
     preload() {
-        // 創建簡單的圖形，無需圖片資源
+        // 加載logo圖片
+        this.load.image('logo', 'assets/images/logo .jpg');
     }
 
     create() {
-        // 背景 - 可以改成其他顏色，例如：
-        // 0x4a90e2 = 藍色, 0xff6b9d = 粉紅, 0x9b59b6 = 紫色
-        // 0x2ecc71 = 綠色, 0xf39c12 = 橙色, 0xe74c3c = 紅色
+        // 背景
         this.add.rectangle(400, 300, 800, 600, 0x4a90e2).setAlpha(0.8);
+        
+        // 顯示logo（可選）
+        // this.add.image(400, 100, 'logo').setDisplaySize(200, 100);
         
         // 標題
         this.add.text(400, 150, '🎮 介詞冒險遊戲', { 
@@ -30,14 +32,21 @@ class MainMenuScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         // 開始按鈕
-        const startButton = this.createButton(400, 320, '開始遊戲', 0x4caf50);
+        const startButton = this.createButton(400, 300, '🎮 開始遊戲', 0x4caf50);
         startButton.on('pointerdown', () => {
+            this.sound.stopAll();
+            this.scene.start('ActionGameScene');
+        });
+        
+        // 經典模式按鈕
+        const classicButton = this.createButton(400, 380, '📚 經典模式', 0x9c27b0);
+        classicButton.on('pointerdown', () => {
             this.sound.stopAll();
             this.scene.start('CityLevelScene');
         });
 
         // 說明按鈕
-        const instructionsButton = this.createButton(400, 400, '遊戲說明', 0x2196f3);
+        const instructionsButton = this.createButton(400, 460, '遊戲說明', 0x2196f3);
         instructionsButton.on('pointerdown', () => {
             this.showInstructions();
         });
