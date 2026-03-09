@@ -31,10 +31,13 @@ class ActionGameScene extends Phaser.Scene {
         // UI介面
         this.createUI();
         
-        // 鍵盤控制
+        // 鍵盤控制（主鍵盤 + 小鍵盤）
         this.key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
         this.key2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
         this.key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
+        this.numpad1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_ONE);
+        this.numpad2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_TWO);
+        this.numpad3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_THREE);
         
         // 顯示開始提示
         this.showStartMessage();
@@ -89,25 +92,25 @@ class ActionGameScene extends Phaser.Scene {
     }
 
     showStartMessage() {
-        const startBox = this.add.rectangle(400, 300, 600, 350, 0x000000, 0.9);
-        const startText = this.add.text(400, 220, '🎮 準備好了嗎？', {
+        const startBox = this.add.rectangle(400, 300, 650, 400, 0x000000, 0.95);
+        const startText = this.add.text(400, 180, '🎮 準備好了嗎？', {
             fontSize: '48px',
             fill: '#ffffff',
             fontStyle: 'bold'
         }).setOrigin(0.5);
         
-        const instructions = this.add.text(400, 310, 
+        const instructions = this.add.text(400, 290, 
             '物件會從右邊飛過來！\n快速按對應的數字鍵：\n\n1 = 走過街道 (ACROSS)\n2 = 跳過障礙 (OVER)\n3 = 爬上平台 (ONTO)\n\n答對加分，答錯扣生命！',
             {
-                fontSize: '20px',
+                fontSize: '22px',
                 fill: '#ffeb3b',
                 align: 'center',
-                lineSpacing: 5
+                lineSpacing: 8
             }
         ).setOrigin(0.5);
         
-        // 點擊或按任意數字鍵開始
-        const startButton = this.add.text(400, 450, '👆 點擊這裡或按任意數字鍵開始', {
+        // 點擊或按任意鍵開始
+        const startButton = this.add.text(400, 440, '👆 點擊這裡或按任意鍵開始', {
             fontSize: '24px',
             fill: '#00ff00',
             fontStyle: 'bold',
@@ -135,10 +138,8 @@ class ActionGameScene extends Phaser.Scene {
         // 點擊開始
         startButton.on('pointerdown', startGame);
         
-        // 或按任意數字鍵開始
-        this.input.keyboard.once('keydown-ONE', startGame);
-        this.input.keyboard.once('keydown-TWO', startGame);
-        this.input.keyboard.once('keydown-THREE', startGame);
+        // 按任意鍵開始
+        this.input.keyboard.once('keydown', startGame);
     }
 
     update(time, delta) {
@@ -162,12 +163,12 @@ class ActionGameScene extends Phaser.Scene {
             }
         });
         
-        // 檢查按鍵
-        if (Phaser.Input.Keyboard.JustDown(this.key1)) {
+        // 檢查按鍵（主鍵盤 + 小鍵盤）
+        if (Phaser.Input.Keyboard.JustDown(this.key1) || Phaser.Input.Keyboard.JustDown(this.numpad1)) {
             this.checkAnswer('ACROSS');
-        } else if (Phaser.Input.Keyboard.JustDown(this.key2)) {
+        } else if (Phaser.Input.Keyboard.JustDown(this.key2) || Phaser.Input.Keyboard.JustDown(this.numpad2)) {
             this.checkAnswer('OVER');
-        } else if (Phaser.Input.Keyboard.JustDown(this.key3)) {
+        } else if (Phaser.Input.Keyboard.JustDown(this.key3) || Phaser.Input.Keyboard.JustDown(this.numpad3)) {
             this.checkAnswer('ONTO');
         }
         

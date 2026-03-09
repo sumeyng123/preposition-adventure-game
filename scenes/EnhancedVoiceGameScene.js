@@ -44,9 +44,13 @@ class EnhancedVoiceGameScene extends Phaser.Scene {
     }
 
     setupKeyboard() {
-        // 數字鍵 1-9, 0
+        // 主鍵盤數字鍵 1-9, 0
         for (let i = 0; i <= 9; i++) {
             this['key' + i] = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes['DIGIT_' + i]);
+        }
+        // 小鍵盤數字鍵
+        for (let i = 0; i <= 9; i++) {
+            this['numpad' + i] = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes['NUMPAD_' + i]);
         }
         this.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
@@ -311,7 +315,7 @@ class EnhancedVoiceGameScene extends Phaser.Scene {
         };
         
         startButton.on('pointerdown', startGame);
-        this.input.keyboard.once('keydown-SPACE', startGame);
+        this.input.keyboard.once('keydown', startGame);
     }
 
     update(time, delta) {
@@ -345,16 +349,24 @@ class EnhancedVoiceGameScene extends Phaser.Scene {
             }
         });
         
-        // 檢查數字鍵
-        const keyMap = {
-            '1': 'ACROSS', '2': 'OVER', '3': 'UNDER', '4': 'THROUGH',
-            '5': 'ONTO', '6': 'BEHIND', '7': 'IN_FRONT', '8': 'BETWEEN',
-            '9': 'AROUND', '0': 'INTO'
-        };
+        // 檢查數字鍵（主鍵盤 + 小鍵盤）
+        const keyMap = [
+            { keys: [this.key1, this.numpad1], action: 'ACROSS' },
+            { keys: [this.key2, this.numpad2], action: 'OVER' },
+            { keys: [this.key3, this.numpad3], action: 'UNDER' },
+            { keys: [this.key4, this.numpad4], action: 'THROUGH' },
+            { keys: [this.key5, this.numpad5], action: 'ONTO' },
+            { keys: [this.key6, this.numpad6], action: 'BEHIND' },
+            { keys: [this.key7, this.numpad7], action: 'IN_FRONT' },
+            { keys: [this.key8, this.numpad8], action: 'BETWEEN' },
+            { keys: [this.key9, this.numpad9], action: 'AROUND' },
+            { keys: [this.key0, this.numpad0], action: 'INTO' }
+        ];
         
-        for (let [key, action] of Object.entries(keyMap)) {
-            if (Phaser.Input.Keyboard.JustDown(this['key' + key])) {
-                this.checkAnswer(action);
+        for (let mapping of keyMap) {
+            if (mapping.keys.some(key => key && Phaser.Input.Keyboard.JustDown(key))) {
+                this.checkAnswer(mapping.action);
+                break;
             }
         }
         

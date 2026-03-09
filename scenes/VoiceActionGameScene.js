@@ -39,6 +39,9 @@ class VoiceActionGameScene extends Phaser.Scene {
         this.key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
         this.key2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
         this.key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
+        this.numpad1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_ONE);
+        this.numpad2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_TWO);
+        this.numpad3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_THREE);
         this.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         
         // 顯示開始提示
@@ -269,7 +272,7 @@ class VoiceActionGameScene extends Phaser.Scene {
         };
         
         startButton.on('pointerdown', startGame);
-        this.input.keyboard.once('keydown-SPACE', startGame);
+        this.input.keyboard.once('keydown', startGame);
     }
 
     update(time, delta) {
@@ -302,11 +305,11 @@ class VoiceActionGameScene extends Phaser.Scene {
         });
         
         // 檢查鍵盤輸入（備用）
-        if (Phaser.Input.Keyboard.JustDown(this.key1)) {
+        if (Phaser.Input.Keyboard.JustDown(this.key1) || Phaser.Input.Keyboard.JustDown(this.numpad1)) {
             this.checkAnswer('ACROSS');
-        } else if (Phaser.Input.Keyboard.JustDown(this.key2)) {
+        } else if (Phaser.Input.Keyboard.JustDown(this.key2) || Phaser.Input.Keyboard.JustDown(this.numpad2)) {
             this.checkAnswer('OVER');
-        } else if (Phaser.Input.Keyboard.JustDown(this.key3)) {
+        } else if (Phaser.Input.Keyboard.JustDown(this.key3) || Phaser.Input.Keyboard.JustDown(this.numpad3)) {
             this.checkAnswer('ONTO');
         }
         
