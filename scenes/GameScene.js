@@ -26,8 +26,8 @@ class GameScene extends Phaser.Scene {
         // 創建玩家
         this.createPlayer();
         
-        // 創建障礙物群組
-        this.obstacles = this.physics.add.group();
+        // 創建障礙物數組
+        this.obstacles = [];
         
         // 創建UI
         this.createUI();
@@ -42,7 +42,8 @@ class GameScene extends Phaser.Scene {
         };
         
         // 碰撞檢測
-        this.physics.add.overlap(this.player, this.obstacles, this.hitObstacle, null, this);
+        this.physics.add.collider(this.player, this.ground); // 玩家與地板碰撞
+        // 障礙物碰撞在 update 中手動檢查
     }
 
     loadQuestions() {
@@ -97,8 +98,13 @@ class GameScene extends Phaser.Scene {
             this.bgStars.add(star);
         }
         
-        // 地板
-        this.ground = this.add.rectangle(width / 2, height - 30, width, 60, 0x330066);
+        // 地板（物理平台）
+        this.ground = this.physics.add.staticSprite(width / 2, height - 30, null);
+        this.ground.body.setSize(width, 60);
+        this.ground.setVisible(false); // 隱藏物理體
+        
+        // 地板視覺
+        this.groundGraphics = this.add.rectangle(width / 2, height - 30, width, 60, 0x330066);
     }
 
     createPlayer() {
@@ -198,12 +204,27 @@ class GameScene extends Phaser.Scene {
             this.playerGraphics.y = this.player.y;
             
             // 更新障礙物
-            this.obstacles.children.entries.forEach(obstacle => {
+            for (let i = this.obstacles.length - 1; i >= 0; i--) {
+                const obstacle = this.obstacles[i];
                 obstacle.x -= this.speed * delta / 1000;
+                
+                // 檢查碰撞
+                const distance = Phaser.Math.Distance.Between(
+                    this.player.x, this.player.y,
+                    obstacle.x, obstacle.y
+                );
+                
+                if (distance < 40 && !obstacle.hit) {
+                    obstacle.hit = true;
+                    this.hitObstacle(obstacle);
+                }
+                
+                // 移除超出畫面的障礙物
                 if (obstacle.x < -50) {
                     obstacle.destroy();
+                    this.obstacles.splice(i, 1);
                 }
-            });
+            }
         }
     }
 
@@ -244,37 +265,41 @@ class GameScene extends Phaser.Scene {
         const width = this.cameras.main.width;
         
         const types = [
-            { emoji: '🪨', y: height - 90, size: 30, type: 'rock' }, // 石頭 - 需要跳或蹲
-            { emoji: '🦅', y: height - 200, size: 25, type: 'bird' } // 鳥 - 需要蹲
+            { emoji: '🪨', y: height - 90, size: 40, type: 'rock' }, // 石頭 - 需要跳或蹲
+            { emoji: '🦅', y: height - 200, size: 40, type: 'bird' } // 鳥 - 需要蹲
         ];
         
         const obstacleType = Phaser.Math.RND.pick(types);
         
-        const obstacle = this.obstacles.create(width + 50, obstacleType.y, null);
-        obstacle.body.setSize(obstacleType.size, obstacleType.size);
-        obstacle.body.setAllowGravity(false);
+        // 創建容器來包含障礙物
+        const obstacle = this.add.container(width + 50, obstacleType.y);
         
-        // 視覺
-        const emoji = this.add.text(width + 50, obstacleType.y, obstacleType.emoji, {
-            fontSize: '40px'
+        // 添加 emoji
+        const emoji = this.add.text(0, 0, obstacleType.emoji, {
+            fontSize: '50px'
         }).setOrigin(0.5);
         
-        obstacle.emoji = emoji;
+        obstacle.add(emoji);
         obstacle.obstacleType = obstacleType.type;
+        obstacle.hit = false;
+        
+        // 添加到障礙物數組
+        this.obstacles.push(obstacle);
     }
 
-    hitObstacle(player, obstacle) {
-        if (obstacle.hit) return;
-        obstacle.hit = true;
-        
+    hitObstacle(obstacle) {
         this.loseLife();
         
         // 閃紅效果
         this.cameras.main.shake(200, 0.01);
         this.cameras.main.flash(200, 255, 0, 0);
         
+        // 銷毀障礙物
         obstacle.destroy();
-        if (obstacle.emoji) obstacle.emoji.destroy();
+        const index = this.obstacles.indexOf(obstacle);
+        if (index > -1) {
+            this.obstacles.splice(index, 1);
+        }
     }
 
     loseLife() {
@@ -292,7 +317,8 @@ class GameScene extends Phaser.Scene {
         this.physics.pause();
         
         // 清除所有障礙物
-        this.obstacles.clear(true, true);
+        this.obstacles.forEach(obstacle => obstacle.destroy());
+        this.obstacles = [];
         
         // 顯示 Fog Fiend 和問題
         this.showBattleScreen();
