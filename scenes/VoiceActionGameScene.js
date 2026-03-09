@@ -18,6 +18,7 @@ class VoiceActionGameScene extends Phaser.Scene {
         this.spawnInterval = 2000;
         this.isGameOver = false;
         this.isListening = false;
+        this.gameStarted = false;
         
         // 背景
         this.add.image(400, 300, 'gameBg').setDisplaySize(800, 600).setAlpha(0.6);
@@ -210,66 +211,69 @@ class VoiceActionGameScene extends Phaser.Scene {
     }
 
     showStartMessage() {
-        const startBox = this.add.rectangle(400, 300, 700, 400, 0x000000, 0.95);
-        const startText = this.add.text(400, 200, '🎤 語音控制遊戲！', {
+        const startBox = this.add.rectangle(400, 300, 700, 450, 0x000000, 0.95);
+        const startText = this.add.text(400, 180, '🎤 語音控制遊戲！', {
             fontSize: '48px',
             fill: '#00ff00',
             fontStyle: 'bold'
         }).setOrigin(0.5);
         
-        const instructions = this.add.text(400, 320, 
+        const instructions = this.add.text(400, 300, 
             '物件會從右邊飛過來！\n\n🎤 語音控制（推薦）：\n說「走過」「跳過」「爬上」\n按空格鍵啟動/停止語音\n\n⌨️ 鍵盤控制（備用）：\n1 = 走過街道 (ACROSS)\n2 = 跳過障礙 (OVER)\n3 = 爬上平台 (ONTO)\n\n答對加分，答錯扣生命！',
             {
-                fontSize: '20px',
+                fontSize: '18px',
                 fill: '#ffffff',
                 align: 'center',
                 lineSpacing: 5
             }
         ).setOrigin(0.5);
         
-        const countdownText = this.add.text(400, 510, '3', {
-            fontSize: '72px',
-            fill: '#ff0000',
-            fontStyle: 'bold'
-        }).setOrigin(0.5);
+        const startButton = this.add.text(400, 490, '👆 點擊這裡或按空格鍵開始', {
+            fontSize: '24px',
+            fill: '#00ff00',
+            fontStyle: 'bold',
+            backgroundColor: '#333333',
+            padding: { x: 15, y: 10 }
+        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
         
-        let count = 3;
-        const countdown = this.time.addEvent({
-            delay: 1000,
-            repeat: 2,
-            callback: () => {
-                count--;
-                if (count > 0) {
-                    countdownText.setText(count);
-                } else {
-                    startBox.destroy();
-                    startText.destroy();
-                    instructions.destroy();
-                    countdownText.destroy();
-                    
-                    // 提示啟動語音
-                    if (this.voiceSupported) {
-                        const voiceTip = this.add.text(400, 300, '按空格鍵啟動語音！', {
-                            fontSize: '32px',
-                            fill: '#00ff00',
-                            backgroundColor: '#000000',
-                            padding: { x: 20, y: 10 }
-                        }).setOrigin(0.5);
-                        
-                        this.tweens.add({
-                            targets: voiceTip,
-                            alpha: 0,
-                            duration: 3000,
-                            onComplete: () => voiceTip.destroy()
-                        });
-                    }
-                }
-            }
+        this.tweens.add({
+            targets: startButton,
+            alpha: 0.3,
+            duration: 500,
+            yoyo: true,
+            repeat: -1
         });
+        
+        const startGame = () => {
+            this.gameStarted = true;
+            startBox.destroy();
+            startText.destroy();
+            instructions.destroy();
+            startButton.destroy();
+            
+            if (this.voiceSupported) {
+                const voiceTip = this.add.text(400, 300, '按空格鍵啟動語音！', {
+                    fontSize: '32px',
+                    fill: '#00ff00',
+                    backgroundColor: '#000000',
+                    padding: { x: 20, y: 10 }
+                }).setOrigin(0.5);
+                
+                this.tweens.add({
+                    targets: voiceTip,
+                    alpha: 0,
+                    duration: 3000,
+                    onComplete: () => voiceTip.destroy()
+                });
+            }
+        };
+        
+        startButton.on('pointerdown', startGame);
+        this.input.keyboard.once('keydown-SPACE', startGame);
     }
 
     update(time, delta) {
-        if (this.isGameOver) return;
+        if (this.isGameOver || !this.gameStarted) return;
         
         // 空格鍵控制語音
         if (Phaser.Input.Keyboard.JustDown(this.keySpace)) {

@@ -17,6 +17,7 @@ class ActionGameScene extends Phaser.Scene {
         this.spawnTimer = 0;
         this.spawnInterval = 2000; // 2秒生成一個物件
         this.isGameOver = false;
+        this.gameStarted = false; // 遊戲是否已開始
         
         // 背景
         this.add.image(400, 300, 'gameBg').setDisplaySize(800, 600).setAlpha(0.6);
@@ -88,14 +89,14 @@ class ActionGameScene extends Phaser.Scene {
     }
 
     showStartMessage() {
-        const startBox = this.add.rectangle(400, 300, 600, 300, 0x000000, 0.9);
-        const startText = this.add.text(400, 250, '🎮 準備好了嗎？', {
+        const startBox = this.add.rectangle(400, 300, 600, 350, 0x000000, 0.9);
+        const startText = this.add.text(400, 220, '🎮 準備好了嗎？', {
             fontSize: '48px',
             fill: '#ffffff',
             fontStyle: 'bold'
         }).setOrigin(0.5);
         
-        const instructions = this.add.text(400, 330, 
+        const instructions = this.add.text(400, 310, 
             '物件會從右邊飛過來！\n快速按對應的數字鍵：\n\n1 = 走過街道 (ACROSS)\n2 = 跳過障礙 (OVER)\n3 = 爬上平台 (ONTO)\n\n答對加分，答錯扣生命！',
             {
                 fontSize: '20px',
@@ -105,32 +106,43 @@ class ActionGameScene extends Phaser.Scene {
             }
         ).setOrigin(0.5);
         
-        const countdownText = this.add.text(400, 470, '3', {
-            fontSize: '72px',
-            fill: '#ff0000',
-            fontStyle: 'bold'
-        }).setOrigin(0.5);
+        // 點擊或按任意數字鍵開始
+        const startButton = this.add.text(400, 450, '👆 點擊這裡或按任意數字鍵開始', {
+            fontSize: '24px',
+            fill: '#00ff00',
+            fontStyle: 'bold',
+            backgroundColor: '#333333',
+            padding: { x: 15, y: 10 }
+        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
         
-        let count = 3;
-        const countdown = this.time.addEvent({
-            delay: 1000,
-            repeat: 2,
-            callback: () => {
-                count--;
-                if (count > 0) {
-                    countdownText.setText(count);
-                } else {
-                    startBox.destroy();
-                    startText.destroy();
-                    instructions.destroy();
-                    countdownText.destroy();
-                }
-            }
+        // 閃爍效果
+        this.tweens.add({
+            targets: startButton,
+            alpha: 0.3,
+            duration: 500,
+            yoyo: true,
+            repeat: -1
         });
+        
+        const startGame = () => {
+            this.gameStarted = true;
+            startBox.destroy();
+            startText.destroy();
+            instructions.destroy();
+            startButton.destroy();
+        };
+        
+        // 點擊開始
+        startButton.on('pointerdown', startGame);
+        
+        // 或按任意數字鍵開始
+        this.input.keyboard.once('keydown-ONE', startGame);
+        this.input.keyboard.once('keydown-TWO', startGame);
+        this.input.keyboard.once('keydown-THREE', startGame);
     }
 
     update(time, delta) {
-        if (this.isGameOver) return;
+        if (this.isGameOver || !this.gameStarted) return; // 遊戲未開始或已結束時不更新
         
         // 生成物件
         this.spawnTimer += delta;
